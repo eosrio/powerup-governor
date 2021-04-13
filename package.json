@@ -1,0 +1,27 @@
+{
+  "name": "powerup-governor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "run": "node dist/index.js",
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": {
+    "name": "EOS Rio",
+    "email": "contact@eosrio.io"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "bn.js": "5.2.0",
+    "cross-fetch": "3.1.4",
+    "eosjs": "22.0.0-rc2",
+    "telegraf": "4.3.0"
+  },
+  "devDependencies": {
+    "@types/bn.js": "^5.1.0",
+    "@types/text-encoding": "0.0.35",
+    "typescript": "4.2.4"
+  }
+}
