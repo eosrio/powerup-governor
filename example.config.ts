@@ -5,17 +5,19 @@ export const Configuration = {
 	// managed accounts
 	accounts: [
 		{
-			name: 'eosriobrazil',
-			payer: 'eosriobrazil',
-			requiredCPUAvailability: 150000,
-			requiredNETAvailability: 4096
+			name: 'TARGET_ACCOUNT',
+			payer: 'PAYER_ACCOUNT',
+			requiredCPUAvailability: 1600000,
+			allowedExtraCPU: 100000,
+			requiredNETAvailability: 300000,
+			allowedExtraNET: 50000
 		}
 	],
 	// assigned payers
 	payers: [
 		{
-			name: 'eosriobrazil',
-			key: 'PVT_K1_',
+			name: 'PAYER_ACCOUNT',
+			key: 'PAYER_PRIVATE_KEY',
 			permission: 'powerup'
 		}
 	]
