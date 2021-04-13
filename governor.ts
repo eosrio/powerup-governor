@@ -5,6 +5,7 @@ import * as BN from "bn.js";
 import {fetch} from "cross-fetch";
 import {assetToFloat} from "./functions";
 import {Configuration} from "./config";
+
 const config = Configuration;
 
 // constants
@@ -116,12 +117,27 @@ export class PowerupGovernor {
 			const weightPerUs = cpuWeight.div(new BN(cpu.max));
 			const pctCpuFree = (cpu.available / cpu.max) * 100;
 			console.log(`${accountData.account_name} has ${cpu.available} us of CPU available (${pctCpuFree.toFixed(2)}%)`);
-			let requiredCpu = (new BN(account.requiredCPUAvailability - cpu.available)).mul(weightPerUs);
+			let requiredCpu = new BN(account.requiredCPUAvailability - cpu.max);
+
+			if (cpu.available === 0) {
+				const usedExtra = cpu.used - cpu.max;
+				if (usedExtra > 0) {
+					if (usedExtra > account.allowedExtraCPU) {
+						console.log(`${accountData.account_name} has used ${usedExtra} us and the maximum allowed to powerup is ${account.allowedExtraCPU}!`);
+						continue;
+					} else {
+						requiredCpu = new BN(account.allowedExtraCPU);
+					}
+				}
+			}
 
 			if (requiredCpu.gt(zero)) {
-				console.log(`${account.name} needs ${account.requiredCPUAvailability - cpu.available} us of CPU`);
+				console.log(`${account.name} needs ${requiredCpu.toString()} us of CPU`);
+				requiredCpu = requiredCpu.mul(weightPerUs);
 				requiredCpuFraction = requiredCpu.mul(powerupFraction).div(new BN(this.powerupState.cpu.weight));
 			}
+
+
 
 			// calculate fraction for NET
 			const net = accountData.net_limit;
@@ -129,13 +145,27 @@ export class PowerupGovernor {
 			const weightPerByte = netWeight.div(new BN(net.max));
 			const pctNetFree = (net.available / net.max) * 100;
 			console.log(`${accountData.account_name} has ${net.available} bytes of NET available (${pctNetFree.toFixed(2)}%)`);
-			let requiredNet = (new BN(account.requiredNETAvailability - net.available)).mul(weightPerByte);
+
+			let requiredNet = new BN(account.requiredNETAvailability - net.max);
+
+			if (net.available === 0) {
+				const usedExtra = net.used - net.max;
+				if (usedExtra > 0) {
+					if (usedExtra > account.allowedExtraNET) {
+						console.log(`${accountData.account_name} has used ${usedExtra} bytes and the maximum allowed to powerup is ${account.allowedExtraNET}!`);
+						continue;
+					} else {
+						requiredNet = new BN(account.allowedExtraNET);
+					}
+				}
+			}
 			if (requiredNet.gt(zero)) {
-				console.log(`${account.name} needs ${account.requiredNETAvailability - net.available} us of CPU`);
+				console.log(`${account.name} needs ${requiredNet.toString()} bytes of NET`);
+				requiredNet = requiredNet.mul(weightPerByte);
 				requiredNetFraction = requiredNet.mul(powerupFraction).div(new BN(this.powerupState.net.weight));
 			}
 
-			// calculate fee
+			// calculate fee CPU + NET
 			const feeAmount = this.calculateFee(this.powerupState.cpu, requiredCpu) + this.calculateFee(this.powerupState.net, requiredNet);
 
 			if (feeAmount > 0) {
@@ -157,6 +187,7 @@ export class PowerupGovernor {
 							data: powerupActionData
 						}]
 					};
+					console.log('Pushing transaction...');
 					console.log(JSON.stringify(transaction, null, 2));
 					const trxResponse = await this.api.transact(transaction, {
 						useLastIrreversible: true,
@@ -164,7 +195,7 @@ export class PowerupGovernor {
 						expireSeconds: 3600,
 						sign: true
 					});
-					console.log(trxResponse);
+					console.log(`Trx Id: ${trxResponse["transaction_id"]} on block ${trxResponse["processed"]["block_num"]}`);
 				} catch (e) {
 					console.log('\nCaught exception: ' + e);
 					if (e instanceof RpcError) {
