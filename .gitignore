@@ -1,2 +1,4 @@
-./config.ts
-node_modules
+/node_modules
+/.idea
+/dist
+/config.ts
