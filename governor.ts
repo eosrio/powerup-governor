@@ -116,7 +116,7 @@ export class PowerupGovernor {
 			const cpuWeight = new BN(accountData.cpu_weight);
 			const weightPerUs = cpuWeight.div(new BN(cpu.max));
 			const pctCpuFree = (cpu.available / cpu.max) * 100;
-			console.log(`${accountData.account_name} has ${cpu.available} us of CPU available (${pctCpuFree.toFixed(2)}%)`);
+			console.log(`${accountData.account_name} has ${cpu.available} us of ${cpu.max} us CPU available (${pctCpuFree.toFixed(2)}%)`);
 			let requiredCpu = new BN(account.requiredCPUAvailability - cpu.max);
 
 			if (cpu.available === 0) {
@@ -138,13 +138,12 @@ export class PowerupGovernor {
 			}
 
 
-
 			// calculate fraction for NET
 			const net = accountData.net_limit;
 			const netWeight = new BN(accountData.net_weight);
 			const weightPerByte = netWeight.div(new BN(net.max));
 			const pctNetFree = (net.available / net.max) * 100;
-			console.log(`${accountData.account_name} has ${net.available} bytes of NET available (${pctNetFree.toFixed(2)}%)`);
+			console.log(`${accountData.account_name} has ${net.available} of ${net.max} bytes of NET available (${pctNetFree.toFixed(2)}%)`);
 
 			let requiredNet = new BN(account.requiredNETAvailability - net.max);
 
