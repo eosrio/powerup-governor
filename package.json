@@ -1,12 +1,11 @@
 {
-  "name": "powerup-governor",
+  "name": "@eosrio/powerup-governor",
   "version": "1.1.0",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
     "start": "node dist/index.js",
-    "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc"
   },
   "author": {
     "name": "EOS Rio",
