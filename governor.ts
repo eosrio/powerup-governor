@@ -8,10 +8,33 @@ import {Configuration} from "./config";
 
 const config = Configuration;
 
+if (!config.intervalSecs) {
+	config.intervalSecs = 3600;
+} else {
+	if (config.intervalSecs <= 30) {
+		config.intervalSecs = 30;
+	}
+}
+
+if (!config.api) {
+	console.log('API URL not defined!');
+	process.exit(1);
+}
+
+if (!config.accounts || config.accounts?.length === 0) {
+	console.log('No accounts defined! Please check your config.ts file.');
+	process.exit(1);
+}
+
+if (!config.payers || config.payers?.length === 0) {
+	console.log('No payers defined! Please check your config.ts file.');
+	process.exit(1);
+}
+
 // constants
 const zero = new BN(0);
-const decimals = 10000;
 // 10e4 (EOS native)
+const decimals = 10000;
 const precision = new BN(decimals);
 // 10e7
 const precision2 = new BN(10000000);

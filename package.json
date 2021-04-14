@@ -1,6 +1,6 @@
 {
   "name": "powerup-governor",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -16,8 +16,7 @@
   "dependencies": {
     "bn.js": "5.2.0",
     "cross-fetch": "3.1.4",
-    "eosjs": "22.0.0-rc2",
-    "telegraf": "4.3.0"
+    "eosjs": "22.0.0-rc2"
   },
   "devDependencies": {
     "@types/bn.js": "^5.1.0",
