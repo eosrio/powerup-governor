@@ -137,7 +137,7 @@ export class PowerupGovernor {
             // calculate fraction for CPU
             const cpu = accountData.cpu_limit;
             const cpuMax = new BN(cpu.max);
-            const cpuWeight = new BN(accountData.cpu_weight).div(precision);
+            const cpuWeight = new BN(accountData.cpu_weight);
             const weightPerUs = cpuMax.mul(precision2).div(cpuWeight).toNumber() / precision2.toNumber();
             const pctCpuFree = (cpu.available / cpu.max) * 100;
             console.log(`${accountData.account_name} has ${cpu.available} us of ${cpu.max} us CPU available (${pctCpuFree.toFixed(2)}%)`);
@@ -156,13 +156,13 @@ export class PowerupGovernor {
 
             if (requiredCpu.gt(zero)) {
                 console.log(`${account.name} needs ${requiredCpu.toString()} us of CPU`);
-                requiredCpu = new BN(requiredCpu.toNumber() / weightPerUs * (precision).toNumber());
+                requiredCpu = new BN(requiredCpu.toNumber() / weightPerUs);
                 requiredCpuFraction = requiredCpu.mul(powerupFraction).div(new BN(this.powerupState.cpu.weight));
             }
 
             // calculate fraction for NET
             const net = accountData.net_limit;
-            const netWeight = new BN(accountData.net_weight).div(precision);
+            const netWeight = new BN(accountData.net_weight);
             const netMax = new BN(net.max);
             const weightPerByte = netMax.mul(precision2).div(netWeight).toNumber() / precision2.toNumber();
             const pctNetFree = (net.available / net.max) * 100;
@@ -181,7 +181,7 @@ export class PowerupGovernor {
             }
             if (requiredNet.gt(zero)) {
                 console.log(`${account.name} needs ${requiredNet.toString()} bytes of NET`);
-                requiredNet = new BN(requiredNet.toNumber() / weightPerByte * precision.toNumber());
+                requiredNet = new BN(requiredNet.toNumber() / weightPerByte );
                 requiredNetFraction = requiredNet.mul(powerupFraction).div(new BN(this.powerupState.net.weight));
             }
 
