@@ -36,8 +36,8 @@ const zero = new BN(0);
 // 10e4 (EOS native)
 const decimals = 10000;
 const precision = new BN(decimals);
-// 10e9
-const precision2 = new BN(1000000000);
+// 10e15
+const precision2 = new BN(1000000000000000);
 // 10e15
 const powerupFraction = new BN(1000000000000000);
 
